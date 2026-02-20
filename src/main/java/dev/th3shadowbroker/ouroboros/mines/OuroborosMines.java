@@ -27,7 +27,6 @@ import dev.th3shadowbroker.ouroboros.mines.regions.RegionProvider;
 import dev.th3shadowbroker.ouroboros.mines.regions.providers.worldguard.WorldGuardProvider;
 import dev.th3shadowbroker.ouroboros.mines.thirdparty.*;
 import dev.th3shadowbroker.ouroboros.mines.util.*;
-import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,8 +34,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.th3shadowbroker.ouroboros.update.comparison.Comparator;
-import org.th3shadowbroker.ouroboros.update.spiget.SpigetUpdater;
 
 import java.io.File;
 import java.io.InputStream;
@@ -130,9 +127,6 @@ public class OuroborosMines extends JavaPlugin {
         getCommand("om").setExecutor(new OmCommand());
 
         checkForSupportedPlugins();
-
-        new MetricsLite(this, 72325);
-        checkForUpdates();
     }
 
     @Override
@@ -256,38 +250,6 @@ public class OuroborosMines extends JavaPlugin {
     }
 
     private void checkForSupportedPlugins() {
-        boolean questsInstalled = getServer().getPluginManager().isPluginEnabled(QuestsPikaMugSupport.PLUGIN_NAME) ||
-                                  getServer().getPluginManager().isPluginEnabled(QuestsLMBishopSupport.PLUGIN_NAME);
-        if (questsInstalled) {
-            var pikaMugPlugin = Optional.ofNullable(getServer().getPluginManager().getPlugin(QuestsPikaMugSupport.PLUGIN_NAME));
-            pikaMugPlugin.ifPresent(pl -> {
-                if (pl.getDescription().getAuthors().contains(QuestsPikaMugSupport.PLUGIN_AUTHOR)) {
-                    getLogger().info(String.format("Quests (by %s) support is enabled!", QuestsPikaMugSupport.PLUGIN_AUTHOR));
-                    new QuestsPikaMugSupport();
-                }
-            });
-
-            var lmbishopPlugin = Optional.ofNullable(getServer().getPluginManager().getPlugin(QuestsLMBishopSupport.PLUGIN_NAME));
-            lmbishopPlugin.ifPresent(pl -> {
-                if (pl.getDescription().getAuthors().contains(QuestsLMBishopSupport.PLUGIN_AUTHOR)) {
-                    getLogger().info(String.format("Quests (by %s) support is enabled!", QuestsLMBishopSupport.PLUGIN_AUTHOR));
-                    new QuestsLMBishopSupport();
-                }
-            });
-        }
-
-        boolean beautyQuestInstalled = getServer().getPluginManager().isPluginEnabled(BeautyQuestsSupport.PLUGIN_NAME);
-        if (beautyQuestInstalled) {
-            getLogger().info("BeautyQuests support is enabled!");
-            new BeautyQuestsSupport();
-        }
-
-        boolean jobsRebornInstalled = getServer().getPluginManager().isPluginEnabled(JobsRebornSupport.PLUGIN_NAME);
-        if (jobsRebornInstalled) {
-            getLogger().info("Jobs support is enabled!");
-            new JobsRebornSupport();
-        }
-
         boolean placeholderApiInstalled = getServer().getPluginManager().isPluginEnabled(PlaceholderAPISupport.PLUGIN_NAME);
         if (placeholderApiInstalled) {
             getLogger().info("PlaceholderAPI support is enabled!");
@@ -296,35 +258,6 @@ public class OuroborosMines extends JavaPlugin {
                 getLogger().warning("Unable to register placeholders. Skipping!");
             }
         }
-
-        boolean townyInstalled = getServer().getPluginManager().isPluginEnabled(TownySupport.PLUGIN_NAME);
-        if (townyInstalled) {
-            getLogger().info("Towny support is enabled!");
-            new TownySupport();
-        }
-
-        boolean itemsAdderInstalled = getServer().getPluginManager().isPluginEnabled(ItemsAdderSupport.PLUGIN_NAME);
-        if (itemsAdderInstalled) {
-            getLogger().info("ItemdAdder support enabled!");
-            new ItemsAdderSupport();
-        }
-
-        boolean aureliumSkillsInstalled = getServer().getPluginManager().isPluginEnabled(AureliumSkillsSupport.PLUGIN_NAME);
-        if (aureliumSkillsInstalled) {
-            getLogger().info("AureliumSkills support enabled!");
-            new AureliumSkillsSupport();
-        }
-
-        boolean ecoSkillsInstalled = getServer().getPluginManager().isPluginEnabled(EcoSkillsSupport.PLUGIN_NAME);
-        if (ecoSkillsInstalled) {
-            getLogger().info("EcoSkills support enabled!");
-            new EcoSkillsSupport();
-        }
-    }
-
-    private void checkForUpdates() {
-        SpigetUpdater spigetUpdater = new SpigetUpdater(Comparator.SEMANTIC, this,72325);
-        spigetUpdater.checkForUpdate();
     }
 
     public MaterialManager getMaterialManager() {

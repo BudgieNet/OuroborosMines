@@ -19,7 +19,6 @@
 
 package dev.th3shadowbroker.ouroboros.mines.util;
 
-import lombok.Getter;
 import org.bukkit.Material;
 
 import java.util.Arrays;
@@ -29,11 +28,11 @@ public class MaterialIdentifier {
 
     public static final String DEFAULT_NAMESPACE = "minecraft";
 
-    @Getter
     private final String namespace;
-
-    @Getter
     private final String name;
+
+    public String getName() { return name; }
+    public String getNamespace() { return namespace; }
 
     public MaterialIdentifier(String name) {
         this(DEFAULT_NAMESPACE, name);

@@ -20,27 +20,28 @@
 package dev.th3shadowbroker.ouroboros.mines.events.thirdparty.itemsadder;
 
 import dev.th3shadowbroker.ouroboros.mines.util.MaterialIdentifier;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-@AllArgsConstructor
 public class PlaceCustomBlockEvent extends Event {
 
-    @Getter
+    public PlaceCustomBlockEvent(Location location, MaterialIdentifier materialIdentifier) {
+        this.location = location;
+        this.materialIdentifier = materialIdentifier;
+    }
+
     private final Location location;
+    public Location getLocation() { return location; }
 
-    @Getter
     private final MaterialIdentifier materialIdentifier;
+    public MaterialIdentifier getMaterialIdentifier() { return materialIdentifier; }
 
-    @Getter
     private static final HandlerList handlerList = new HandlerList();
 
     @Override
     public HandlerList getHandlers() {
         return handlerList;
     }
-
+    public static HandlerList getHandlerList() { return handlerList; }
 }

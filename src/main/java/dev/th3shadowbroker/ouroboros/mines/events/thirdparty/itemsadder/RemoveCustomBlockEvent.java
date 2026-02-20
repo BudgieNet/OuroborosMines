@@ -19,20 +19,21 @@
 
 package dev.th3shadowbroker.ouroboros.mines.events.thirdparty.itemsadder;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-@AllArgsConstructor
 public class RemoveCustomBlockEvent extends Event {
 
-    @Getter
-    private final Block block;
+    public RemoveCustomBlockEvent(Block block) {
+        this.block = block;
+    }
 
-    @Getter
+    private final Block block;
+    public Block getBlock() { return block; }
+
     private static final HandlerList handlerList = new HandlerList();
+    public static HandlerList getHandlerList() { return handlerList; }
 
     @Override
     public HandlerList getHandlers() {

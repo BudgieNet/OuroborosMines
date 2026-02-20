@@ -19,10 +19,8 @@
 
 package dev.th3shadowbroker.ouroboros.mines.util;
 
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
@@ -119,7 +117,7 @@ public class TriggeredEffect {
                     Location t4 = blockCenter.clone().subtract(0.5, -0.5, -0.5);
 
                     // Dust options for redstone particles
-                    Particle.DustOptions dustOptions = particle == Particle.REDSTONE ? new Particle.DustOptions(particleColor, particleSize) : null;
+                    Particle.DustOptions dustOptions = particle == Particle.DUST ? new Particle.DustOptions(particleColor, particleSize) : null;
 
                     ParticleUtils.getLocationsBetween(b1, b2, 0.1).forEach(loc -> spawnParticle(particle, loc, particleCount, dustOptions));
                     ParticleUtils.getLocationsBetween(b3, b4, 0.1).forEach(loc -> spawnParticle(particle, loc, particleCount, dustOptions));
@@ -139,7 +137,7 @@ public class TriggeredEffect {
 
                 default:
                 case CENTER:
-                    spawnParticle(particle, blockCenter, particleCount, particle == Particle.REDSTONE ? new Particle.DustOptions(particleColor, particleSize) : null);
+                    spawnParticle(particle, blockCenter, particleCount, particle == Particle.DUST ? new Particle.DustOptions(particleColor, particleSize) : null);
                     break;
             }
         }));
@@ -152,7 +150,9 @@ public class TriggeredEffect {
     public static TriggeredEffect fromSection(ConfigurationSection section) {
         TriggeredEffect.Trigger trigger = TriggeredEffect.Trigger.valueOf(section.getName().toUpperCase());
 
-        Sound sound = section.isSet("sound") ? Sound.valueOf(section.getString("sound").toUpperCase()) : null;
+        //Sound sound = section.isSet("sound") ? Sound.valueOf(section.getString("sound").toUpperCase()) : null;
+        NamespacedKey soundKey = section.isSet("sound") ? NamespacedKey.fromString(section.getString("sound").toUpperCase()) : null;
+        Sound sound = Registry.SOUNDS.get(soundKey);
         float soundVolume = (float) section.getDouble("sound-volume", 1);
         float soundPitch = (float) section.getDouble("sound-pitch", 0);
 
