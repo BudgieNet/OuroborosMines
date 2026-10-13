@@ -23,6 +23,7 @@ import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.Locale;
 import java.util.Optional;
 
 public class TriggeredEffect {
@@ -150,9 +151,7 @@ public class TriggeredEffect {
     public static TriggeredEffect fromSection(ConfigurationSection section) {
         TriggeredEffect.Trigger trigger = TriggeredEffect.Trigger.valueOf(section.getName().toUpperCase());
 
-        //Sound sound = section.isSet("sound") ? Sound.valueOf(section.getString("sound").toUpperCase()) : null;
-        NamespacedKey soundKey = section.isSet("sound") ? NamespacedKey.fromString(section.getString("sound").toUpperCase()) : null;
-        Sound sound = Registry.SOUNDS.get(soundKey);
+        Sound sound = section.isSet("sound") ? parseSound(section.getString("sound")) : null;
         float soundVolume = (float) section.getDouble("sound-volume", 1);
         float soundPitch = (float) section.getDouble("sound-pitch", 0);
 
@@ -163,6 +162,17 @@ public class TriggeredEffect {
         Pattern particlePattern = Pattern.valueOf(section.getString("particle-pattern", "center").toUpperCase());
 
         return new TriggeredEffect(sound, soundVolume, soundPitch, particle, particleCount, particleSize, particleColor, particlePattern, trigger);
+    }
+
+    // Accepts registry keys (entity.player.levelup, minecraft:entity.player.levelup) and the old enum names (entity_player_levelup).
+    private static Sound parseSound(String name) {
+        NamespacedKey key = NamespacedKey.fromString(name.toLowerCase(Locale.ROOT));
+        Sound sound = key == null ? null : Registry.SOUNDS.get(key);
+        if (sound != null) return sound;
+        for (Sound candidate : Registry.SOUNDS) {
+            if (candidate.getKey().getKey().replace('.', '_').equalsIgnoreCase(name)) return candidate;
+        }
+        throw new IllegalArgumentException("Unknown sound: " + name);
     }
 
     public static enum Trigger {
