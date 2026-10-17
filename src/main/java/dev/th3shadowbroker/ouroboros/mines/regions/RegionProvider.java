@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.regions;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -79,12 +80,12 @@ public abstract class RegionProvider {
                         Constructor<?> providerConstructor = provider.getDeclaredConstructor();
                         return Optional.of((RegionProvider) providerConstructor.newInstance());
                     } catch (ReflectiveOperationException ex) {
-                        OuroborosMines.INSTANCE.getLogger().severe("Unable to create a region provider for " + plugin.get().getName());
-                        ex.printStackTrace();
+                        ChatUtil.error("Unable to create a region provider for " + plugin.get().getName());
+                        ChatUtil.error(ex.toString(), ex);
                     }
                 }
             } else {
-                OuroborosMines.INSTANCE.getLogger().warning(String.format("The class %s does not contain a ProviderDescription annotation and will be ignored!", provider.getName()));
+                ChatUtil.warn(String.format("The class %s does not contain a ProviderDescription annotation and will be ignored!", provider.getName()));
             }
         }
         return Optional.empty();

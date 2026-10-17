@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.commands.OmCommand;
 import dev.th3shadowbroker.ouroboros.mines.drops.DropManager;
 import dev.th3shadowbroker.ouroboros.mines.exceptions.InvalidMineMaterialException;
@@ -78,12 +79,12 @@ public class OuroborosMines extends JavaPlugin {
 
         //Load region provider dynamically
         if (regionProvider.isPresent()) {
-            getLogger().info(String.format("Detected %s", regionProvider.get().getProviderName()));
+            ChatUtil.log(String.format("Detected %s", regionProvider.get().getProviderName()));
             this.regionProvider = regionProvider.get();
             this.regionProvider.onLoad();
             regionProviderFound = true;
         } else {
-            getLogger().severe("No region provider available!");
+            ChatUtil.error("No region provider available!");
             return;
         }
 
@@ -93,7 +94,7 @@ public class OuroborosMines extends JavaPlugin {
         taskManager = new TaskManager();
 
         //Config
-        getLogger().info("Loading configuration...");
+        ChatUtil.log("Loading configuration...");
         saveDefaultConfig();
         reloadConfig();
         updateConfig();
@@ -105,6 +106,7 @@ public class OuroborosMines extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        ChatUtil.init(this);
         if (!regionProviderFound) {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
@@ -139,7 +141,7 @@ public class OuroborosMines extends JavaPlugin {
         Optional<Plugin> worldGuard = Optional.ofNullable(getServer().getPluginManager().getPlugin("WorldGuard"));
 
         if (!worldGuard.isPresent()) {
-            getLogger().severe(String.format("WorldGuard is not installed. Disabling %s...", getName()));
+            ChatUtil.error(String.format("WorldGuard is not installed. Disabling %s...", getName()));
             return false;
         }
 
@@ -154,8 +156,8 @@ public class OuroborosMines extends JavaPlugin {
             {
                 materialManager.register(MineableMaterial.fromSection(parentSection.getConfigurationSection(childSectionKey)));
             } catch (InvalidMineMaterialException e) {
-                getLogger().severe(e.getMessage());
-                e.printStackTrace();
+                ChatUtil.error(e.getMessage());
+                ChatUtil.error(e.toString(), e);
             }
         }
 
@@ -175,14 +177,14 @@ public class OuroborosMines extends JavaPlugin {
                     {
                         effectManager.register(TriggeredEffect.fromSection(childSection.get()));
                     } catch (Exception e) {
-                        getLogger().severe("Unable to parse effect of type " + childSectionKey + ": " + e.getMessage());
+                        ChatUtil.error("Unable to parse effect of type " + childSectionKey + ": " + e.getMessage());
                     }
                 } else {
-                    getLogger().severe("Expected " + childSectionKey + " to be a section!");
+                    ChatUtil.error("Expected " + childSectionKey + " to be a section!");
                 }
             }
         } else {
-            getLogger().info("No effects defined");
+            ChatUtil.log("No effects defined");
         }
     }
 
@@ -196,7 +198,7 @@ public class OuroborosMines extends JavaPlugin {
                 getConfig().createSection("chat.messages.depositSizes", defaultConfig.getConfigurationSection("chat.messages.depositSizes").getValues(false));
                 saveConfig();
                 reloadConfig();
-                getLogger().info("Configuration patch for chat.messages.depositSizes applied!");
+                ChatUtil.log("Configuration patch for chat.messages.depositSizes applied!");
              }
 
              //Patch worldNotFound message into config
@@ -204,7 +206,7 @@ public class OuroborosMines extends JavaPlugin {
                  getConfig().set("chat.messages.worldNotFound", defaultConfig.getString("chat.messages.worldNotFound"));
                  saveConfig();
                  reloadConfig();
-                 getLogger().info("Configuration patch for chat.messages.worldNotFound applied!");
+                 ChatUtil.log("Configuration patch for chat.messages.worldNotFound applied!");
              }
 
              //Patch experience settings into config
@@ -212,7 +214,7 @@ public class OuroborosMines extends JavaPlugin {
                  getConfig().set("experience.spawnOrbs", true);
                  saveConfig();
                  reloadConfig();
-                 getLogger().info("Configuration patch for experience.spawnOrbs applied!");
+                 ChatUtil.log("Configuration patch for experience.spawnOrbs applied!");
              }
 
              //Patch messages that are part of the clan-update
@@ -236,7 +238,7 @@ public class OuroborosMines extends JavaPlugin {
              );
              pathsToCopy.forEach(path -> {
                  if (!getConfig().isSet(path)) {
-                     getLogger().info("Configuration patch for " + path + " applied!");
+                     ChatUtil.log("Configuration patch for " + path + " applied!");
                      getConfig().set(path, defaultConfig.get(path));
 
                      saveConfig();
@@ -245,17 +247,17 @@ public class OuroborosMines extends JavaPlugin {
              });
 
          } else {
-             getLogger().severe("Unable to load default-configuration to patch existing configuration!");
+             ChatUtil.error("Unable to load default-configuration to patch existing configuration!");
          }
     }
 
     private void checkForSupportedPlugins() {
         boolean placeholderApiInstalled = getServer().getPluginManager().isPluginEnabled(PlaceholderAPISupport.PLUGIN_NAME);
         if (placeholderApiInstalled) {
-            getLogger().info("PlaceholderAPI support is enabled!");
+            ChatUtil.log("PlaceholderAPI support is enabled!");
             boolean success  = new PlaceholderAPISupport().register();
             if (!success) {
-                getLogger().warning("Unable to register placeholders. Skipping!");
+                ChatUtil.warn("Unable to register placeholders. Skipping!");
             }
         }
     }

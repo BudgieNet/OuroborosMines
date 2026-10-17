@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.listeners;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.events.DefaultDropsCheckEvent;
 import dev.th3shadowbroker.ouroboros.mines.events.DepositDiscoveredEvent;
@@ -72,7 +73,7 @@ public class BlockBreakListener implements Listener {
                     Optional<RegionConfiguration> matchingConfig = getRegionConfiguration(event.getBlock());
 
                     if (matchingConfig.isPresent() && !matchingConfig.get().minesAreOpen()) {
-                        event.getPlayer().sendMessage(TemplateMessage.from("chat.messages.minesClosed", matchingConfig.get().getConfiguration()).colorize().toString());
+                        ChatUtil.sendMsg(event.getPlayer(), TemplateMessage.from("chat.messages.minesClosed", matchingConfig.get().getConfiguration()).colorize().toString(), false);
                         event.setCancelled(true);
                         return;
                     }

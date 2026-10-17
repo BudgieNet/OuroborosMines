@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.listeners;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.drops.DropGroupCreator;
 import dev.th3shadowbroker.ouroboros.mines.util.TemplateMessage;
@@ -46,16 +47,16 @@ public class PlayerInteractListener implements Listener {
                 if (!OuroborosMines.INSTANCE.getDropManager().getDropGroup(dropGroupName).isPresent()) {
                     try {
                         DropGroupCreator.saveDropGroup(container.getInventory(), dropGroupName);
-                        player.sendMessage(TemplateMessage.from("chat.messages.dropGroupCreated").insert("name", dropGroupName).colorize().toString());
+                        ChatUtil.sendMsg(player, TemplateMessage.from("chat.messages.dropGroupCreated").insert("name", dropGroupName).colorize().toString(), false);
                     } catch (IOException ex) {
-                        player.sendMessage(TemplateMessage.from("chat.messages.error").insert("error", ex.getMessage()).colorize().toString());
+                        ChatUtil.sendMsg(player, TemplateMessage.from("chat.messages.error").insert("error", ex.getMessage()).colorize().toString(), false);
                     }
 
                     // Done!
                     DropGroupCreator.clearCreationStatus(player);
                 // Drop group exists
                 } else {
-                    player.sendMessage(TemplateMessage.from("chat.messages.dropGroupExists").insert("name", dropGroupName).colorize().toString());
+                    ChatUtil.sendMsg(player, TemplateMessage.from("chat.messages.dropGroupExists").insert("name", dropGroupName).colorize().toString(), false);
                 }
 
                 event.setCancelled(true);

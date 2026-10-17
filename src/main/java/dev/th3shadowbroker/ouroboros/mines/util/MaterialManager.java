@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.util;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.events.MaterialCheckEvent;
 import dev.th3shadowbroker.ouroboros.mines.regions.MiningRegion;
@@ -41,7 +42,7 @@ public class MaterialManager {
 
     public void loadRegionConfigurations() {
         mineableMaterialOverrides.addAll(RegionConfiguration.getConfigurationsInDirectory(RegionConfiguration.REGION_CONFIG_DIR));
-        OuroborosMines.INSTANCE.getLogger().info("Loaded " + mineableMaterialOverrides.size() + " region-specific configurations");
+        ChatUtil.log("Loaded " + mineableMaterialOverrides.size() + " region-specific configurations");
     }
 
     public void reloadRegionConfigurations() {

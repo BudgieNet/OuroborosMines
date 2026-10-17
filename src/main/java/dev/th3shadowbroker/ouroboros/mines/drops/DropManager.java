@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.drops;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.drops.types.AbstractDrop;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,7 +29,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Logger;
 
 public class DropManager {
 
@@ -38,18 +38,16 @@ public class DropManager {
 
     private final Map<String, DropGroup> dropGroups;
 
-    private final Logger log;
 
     public DropManager(File dropFile) {
         this.dropGroups = new HashMap<>();
         this.file = dropFile;
-        this.log = OuroborosMines.INSTANCE.getLogger();
         if (!dropFile.exists()) {
             try {
                 boolean dropFileCreated = dropFile.createNewFile();
-                if (dropFileCreated) log.info("Drop file created.");
+                if (dropFileCreated) ChatUtil.log("Drop file created.");
             } catch (IOException ex) {
-                log.warning("Failed to create drop file!");
+                ChatUtil.warn("Failed to create drop file!");
             }
         }
         this.configuration = YamlConfiguration.loadConfiguration(dropFile);
@@ -57,7 +55,7 @@ public class DropManager {
     }
 
     private void loadGroups() {
-        log.info(String.format("Loading drops from %s", file.getAbsolutePath()));
+        ChatUtil.log(String.format("Loading drops from %s", file.getAbsolutePath()));
 
         for (String groupName : configuration.getKeys(false)) {
             ConfigurationSection groupSection = configuration.getConfigurationSection(groupName);
@@ -75,11 +73,11 @@ public class DropManager {
 
                 dropGroups.put(groupName, new DropGroup(drops, multidrop, override));
             } catch (Exception ex) {
-                log.warning(String.format("Unable to evaluate the %s section of %s. Please check the wiki. Skipping.", groupName, file.getAbsolutePath()));
+                ChatUtil.warn(String.format("Unable to evaluate the %s section of %s. Please check the wiki. Skipping.", groupName, file.getAbsolutePath()));
             }
         }
 
-        log.info(String.format("Loaded %s drop groups!", dropGroups.size()));
+        ChatUtil.log(String.format("Loaded %s drop groups!", dropGroups.size()));
     }
 
     public void reloadGroups() {

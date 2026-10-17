@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.util;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import org.bukkit.block.Block;
 
@@ -45,7 +46,7 @@ public class TaskManager {
     }
 
     public void flush() {
-        plugin.getLogger().info(String.format("Executing %s pending tasks...", tasks.size()));
+        ChatUtil.log(String.format("Executing %s pending tasks...", tasks.size()));
 
         // Sort attachable replacement tasks to the end to ensure anchor existence.
         tasks.sort((o1, o2) -> {
@@ -58,7 +59,7 @@ public class TaskManager {
         for (int i = 0; i < tasks.size(); i++) {
             ReplacementTask replacementTask = tasks.get(i);
             replacementTask.getTask().cancel();
-            plugin.getLogger().info(String.format("Executing task (Id: %s) [%s/%s]", replacementTask.getTask().getTaskId(),i + 1, tasks.size() ));
+            ChatUtil.log(String.format("Executing task (Id: %s) [%s/%s]", replacementTask.getTask().getTaskId(),i + 1, tasks.size() ));
             replacementTask.run();
         }
     }

@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.util;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.exceptions.InvalidMineMaterialException;
 import org.bukkit.Bukkit;
@@ -87,8 +88,8 @@ public class RegionConfiguration {
                                 try {
                                     materialList.add(MineableMaterial.fromSection(materialDefinitionSection));
                                 } catch (InvalidMineMaterialException e) {
-                                    plugin.getLogger().severe(e.getMessage());
-                                    e.printStackTrace();
+                                    ChatUtil.error(e.getMessage());
+                                    ChatUtil.error(e.toString(), e);
                                 }
                             });
                 });
@@ -153,8 +154,8 @@ public class RegionConfiguration {
         try {
             configuration.save(configurationFile);
         } catch (IOException e) {
-            plugin.getLogger().severe("Unable to save region-configuration to " + configurationFile.getName());
-            e.printStackTrace();
+            ChatUtil.error("Unable to save region-configuration to " + configurationFile.getName());
+            ChatUtil.error(e.toString(), e);
         }
     }
 
@@ -188,7 +189,7 @@ public class RegionConfiguration {
                             regionConfigurations.add(new RegionConfiguration(regionId, world.get().getName()));
                         }
                     } else {
-                        plugin.getLogger().info("The world " + worldDirectory.getName() + " is unknown. You may remove it's directory from the regions directory of OM.");
+                        ChatUtil.log("The world " + worldDirectory.getName() + " is unknown. You may remove it's directory from the regions directory of OM.");
                     }
 
                 }

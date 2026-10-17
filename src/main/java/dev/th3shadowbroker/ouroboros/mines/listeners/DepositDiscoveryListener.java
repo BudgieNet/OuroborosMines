@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.listeners;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.events.DepositDiscoveredEvent;
 import dev.th3shadowbroker.ouroboros.mines.util.TemplateMessage;
@@ -32,10 +33,10 @@ public class DepositDiscoveryListener implements Listener {
 
     @EventHandler
     public void onDepositDiscovered(DepositDiscoveredEvent event) {
-        event.getPlayer().sendMessage(TemplateMessage.from("chat.messages.depositDiscovered")
+        ChatUtil.sendMsg(event.getPlayer(), TemplateMessage.from("chat.messages.depositDiscovered")
                 .insert("material", event.getMineableMaterial().getMaterial().name().toLowerCase().replace("_"," "))
                 .insert("size", getDepositSize(event.getRichness(), event.getMineableMaterial().getDepositMax()))
-                .colorize().toString());
+                .colorize().toString(), false);
         plugin.getEffectManager().getAllTriggeredBy(TriggeredEffect.Trigger.DEPOSIT_DISCOVERED).forEach(effect -> effect.playAt(event.getBlock().getLocation()));
     }
 

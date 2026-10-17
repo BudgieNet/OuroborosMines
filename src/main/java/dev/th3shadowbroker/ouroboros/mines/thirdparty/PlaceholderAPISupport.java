@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.thirdparty;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.util.AnnouncementRunnable;
 import dev.th3shadowbroker.ouroboros.mines.util.RegionConfiguration;
@@ -107,7 +108,7 @@ public class PlaceholderAPISupport extends PlaceholderExpansion {
             case "name":
             case "n":
                 // Abort if there are not enough fragments.
-                System.out.println(fragments.length);
+                ChatUtil.log(String.valueOf(fragments.length));
                 if (fragments.length >= 3) {
                     Optional<RegionConfiguration> regionConfiguration = OuroborosMines.INSTANCE.getMaterialManager().getMineableMaterialOverrides().stream().filter(rc -> rc.getWorld().getName().equals(regionWorld) && rc.getRegionId().equals(regionId)).findFirst();;
                     if (regionConfiguration.isPresent()) {

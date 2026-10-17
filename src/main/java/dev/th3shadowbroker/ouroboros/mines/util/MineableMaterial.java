@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.util;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.drops.DropGroup;
 import dev.th3shadowbroker.ouroboros.mines.exceptions.InvalidMineMaterialException;
@@ -149,7 +150,7 @@ public class MineableMaterial {
             }
             else
             {
-                OuroborosMines.INSTANCE.getLogger().warning( String.format("The mine-material %s defines an invalid replacement-material: %s", section.getName(), materialName) );
+                ChatUtil.warn(String.format("The mine-material %s defines an invalid replacement-material: %s", section.getName(), materialName));
             }
         }
 

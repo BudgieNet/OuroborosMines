@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.commands;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import dev.th3shadowbroker.ouroboros.mines.drops.DropGroupCreator;
 import dev.th3shadowbroker.ouroboros.mines.regions.MiningRegion;
@@ -44,9 +45,9 @@ public class OmCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
         if (args.length == 0) {
             if (sender.hasPermission(Permissions.COMMAND_INFO.permission)) {
-                sender.sendMessage(OuroborosMines.PREFIX + plugin.getName() + " v" + plugin.getDescription().getVersion());
+                ChatUtil.sendMsg(sender, OuroborosMines.PREFIX + plugin.getName() + " v" + plugin.getDescription().getVersion(), false);
             } else {
-                sender.sendMessage(cmd.getPermissionMessage());
+                ChatUtil.sendMsg(sender, cmd.getPermissionMessage(), false);
             }
         } else {
             switch (args[0].toLowerCase())
@@ -60,7 +61,7 @@ public class OmCommand implements CommandExecutor {
                                 if (region.isPresent()) {
                                     createRegionConfiguration(region.get().getRegionId(), player);
                                 } else {
-                                    sender.sendMessage(TemplateMessage.from("chat.messages.regionNotFound").colorize().toString());
+                                    ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.regionNotFound").colorize().toString(), false);
                                 }
                             } else {
                                 String regionId = args[1];
@@ -70,37 +71,37 @@ public class OmCommand implements CommandExecutor {
                                     if (region.isPresent()) {
                                         createRegionConfiguration(region.get().getRegionId(), player);
                                     } else {
-                                        sender.sendMessage(TemplateMessage.from("chat.messages.regionNotFound").colorize().toString());
+                                        ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.regionNotFound").colorize().toString(), false);
                                     }
                                 } else {
-                                    sender.sendMessage(TemplateMessage.from("chat.messages.worldNotFound").insert("world", args[2]).colorize().toString());
+                                    ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.worldNotFound").insert("world", args[2]).colorize().toString(), false);
                                 }
                             }
                         } else {
-                            sender.sendMessage(consoleNotAllowed);
+                            ChatUtil.sendMsg(sender, consoleNotAllowed, false);
                         }
                     } else {
-                        sender.sendMessage(cmd.getPermissionMessage());
+                        ChatUtil.sendMsg(sender, cmd.getPermissionMessage(), false);
                     }
                     break;
 
                 case "reload":
                     if (sender.hasPermission(Permissions.COMMAND_RELOAD.permission)) {
                         try {
-                            sender.sendMessage(TemplateMessage.from("chat.messages.reloadingConfig").colorize().toString());
+                            ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.reloadingConfig").colorize().toString(), false);
                             plugin.reloadConfig();
-                            sender.sendMessage(TemplateMessage.from("chat.messages.reloadingRegionConfigurations").colorize().toString());
+                            ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.reloadingRegionConfigurations").colorize().toString(), false);
                             plugin.getMaterialManager().reloadRegionConfigurations();
-                            sender.sendMessage(TemplateMessage.from("chat.messages.reloadedRegionConfigurations").insert("count", String.valueOf(plugin.getMaterialManager().getMineableMaterialOverrides().size())).colorize().toString());
+                            ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.reloadedRegionConfigurations").insert("count", String.valueOf(plugin.getMaterialManager().getMineableMaterialOverrides().size())).colorize().toString(), false);
                             plugin.getAnnouncementManager().flush();
-                            sender.sendMessage(TemplateMessage.from("chat.messages.reloadingDropGroups").colorize().toString());
+                            ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.reloadingDropGroups").colorize().toString(), false);
                             plugin.getDropManager().reloadGroups();
-                            sender.sendMessage(TemplateMessage.from("chat.messages.reloadedDropGroups").insert("count", String.valueOf(plugin.getDropManager().getGroups().length)).colorize().toString());
+                            ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.reloadedDropGroups").insert("count", String.valueOf(plugin.getDropManager().getGroups().length)).colorize().toString(), false);
                         } catch (Exception ex) {
-                            sender.sendMessage(TemplateMessage.from("chat.messages.error").colorize().insert("error", ex.getMessage()).toString());
+                            ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.error").colorize().insert("error", ex.getMessage()).toString(), false);
                         }
                     } else {
-                        sender.sendMessage(cmd.getPermissionMessage());
+                        ChatUtil.sendMsg(sender, cmd.getPermissionMessage(), false);
                     }
                     break;
 
@@ -116,39 +117,39 @@ public class OmCommand implements CommandExecutor {
                                 // Drop group does not exist
                                 if (!OuroborosMines.INSTANCE.getDropManager().getDropGroup(dropGroupName).isPresent()) {
                                     DropGroupCreator.awaitCreation(player, dropGroupName);
-                                    player.sendMessage(TemplateMessage.from("chat.messages.awaitingRightClick").colorize().toString());
+                                    ChatUtil.sendMsg(player, TemplateMessage.from("chat.messages.awaitingRightClick").colorize().toString(), false);
                                 } else {
-                                    player.sendMessage(TemplateMessage.from("chat.messages.dropGroupExists").insert("name", dropGroupName).colorize().toString());
+                                    ChatUtil.sendMsg(player, TemplateMessage.from("chat.messages.dropGroupExists").insert("name", dropGroupName).colorize().toString(), false);
                                 }
                             } else {
                                 if (DropGroupCreator.creationPending(player)) {
                                     DropGroupCreator.clearCreationStatus(player);
-                                    sender.sendMessage(TemplateMessage.from("chat.messages.awaitingRightClickCancelled").colorize().toString());
+                                    ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.awaitingRightClickCancelled").colorize().toString(), false);
                                 } else {
-                                    sender.sendMessage(TemplateMessage.from("chat.messages.missingDropGroupName").colorize().toString());
+                                    ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.missingDropGroupName").colorize().toString(), false);
                                 }
                             }
                         } else {
-                            sender.sendMessage(consoleNotAllowed);
+                            ChatUtil.sendMsg(sender, consoleNotAllowed, false);
                         }
                     } else {
-                        sender.sendMessage(cmd.getPermissionMessage());
+                        ChatUtil.sendMsg(sender, cmd.getPermissionMessage(), false);
                     }
                     break;
 
                 case "help":
                     if (sender.hasPermission(Permissions.COMMAND_HELP.permission)) {
-                        sender.sendMessage(OuroborosMines.PREFIX + "§e/om customize §9[region] [world]§r " + TemplateMessage.from("chat.messages.help.customize").colorize().toRawString());
-                        sender.sendMessage(OuroborosMines.PREFIX + "§e/om dropgroup §9<name>§r " + TemplateMessage.from("chat.messages.help.dropgroup").colorize().toRawString());
-                        sender.sendMessage(OuroborosMines.PREFIX + "§e/om reload§r " + TemplateMessage.from("chat.messages.help.reload").colorize().toRawString());
+                        ChatUtil.sendMsg(sender, OuroborosMines.PREFIX + "§e/om customize §9[region] [world]§r " + TemplateMessage.from("chat.messages.help.customize").colorize().toRawString(), false);
+                        ChatUtil.sendMsg(sender, OuroborosMines.PREFIX + "§e/om dropgroup §9<name>§r " + TemplateMessage.from("chat.messages.help.dropgroup").colorize().toRawString(), false);
+                        ChatUtil.sendMsg(sender, OuroborosMines.PREFIX + "§e/om reload§r " + TemplateMessage.from("chat.messages.help.reload").colorize().toRawString(), false);
                     } else {
-                        sender.sendMessage(cmd.getPermissionMessage());
+                        ChatUtil.sendMsg(sender, cmd.getPermissionMessage(), false);
                     }
                     break;
 
                 default:
-                    sender.sendMessage(TemplateMessage.from("chat.messages.unrecognizedArgument").colorize().toString());
-                    sender.sendMessage(cmd.getUsage());
+                    ChatUtil.sendMsg(sender, TemplateMessage.from("chat.messages.unrecognizedArgument").colorize().toString(), false);
+                    ChatUtil.sendMsg(sender, cmd.getUsage(), false);
                     break;
             }
         }
@@ -158,9 +159,9 @@ public class OmCommand implements CommandExecutor {
     private void createRegionConfiguration(String regionId, Player player) {
         if (!RegionConfiguration.configExists(regionId, player.getWorld().getName())) {
             new RegionConfiguration(regionId, player.getWorld().getName());
-            player.sendMessage(TemplateMessage.from("chat.messages.regionCustomize").insert("region", regionId).colorize().toString());
+            ChatUtil.sendMsg(player, TemplateMessage.from("chat.messages.regionCustomize").insert("region", regionId).colorize().toString(), false);
         } else {
-            player.sendMessage(TemplateMessage.from("chat.messages.regionAlreadyCustomized").insert("region", regionId).colorize().toString());
+            ChatUtil.sendMsg(player, TemplateMessage.from("chat.messages.regionAlreadyCustomized").insert("region", regionId).colorize().toString(), false);
         }
     }
 

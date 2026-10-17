@@ -19,6 +19,7 @@
 
 package dev.th3shadowbroker.ouroboros.mines.util;
 
+import com.budgienet.chatutil.ChatUtil;
 import dev.th3shadowbroker.ouroboros.mines.OuroborosMines;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -50,9 +51,9 @@ public class AnnouncementRunnable implements Runnable {
     public void run() {
         //System.out.println(String.format("Executable ran for %s", world.getName()));
         if (worlds.size() > 0) {
-            worlds.forEach(world -> world.getPlayers().forEach(player -> player.sendMessage(message)));
+            worlds.forEach(world -> world.getPlayers().forEach(player -> ChatUtil.sendMsg(player, message, false)));
         } else {
-            Bukkit.getServer().broadcastMessage(message);
+            ChatUtil.broadcast(message);
         }
         resetExecutionTime();
     }
