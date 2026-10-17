@@ -1,15 +1,15 @@
-name: ${plugin.name}
-author: ${plugin.author}
-version: ${plugin.version}
-description: ${plugin.description}
-website: ${plugin.website}
-main: ${plugin.main}
+name: ${name}
+author: ${author}
+version: '${version}'
+description: ${description}
+website: ${website}
+main: ${main}
 softdepend: [WorldGuard,Quests,Jobs,PlaceholderAPI,BeautyQuests,Towny,ItemsAdder,AureliumSkills,EcoSkills]
-api-version: 26.3
+api-version: '${apiVersion}'
 
 commands:
   om:
-    description: General command for ${plugin.name}
+    description: General command for ${name}
     usage: /om [customize:reload:help] [region:name] [world]
     permission-message: §cYou're not allowed to do this!
 
