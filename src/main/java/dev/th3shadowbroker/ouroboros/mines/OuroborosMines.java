@@ -65,6 +65,8 @@ public class OuroborosMines extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        // onLoad already logs, so set up ChatUtil here rather than in onEnable
+        ChatUtil.init(this);
         //Check for world-guard and disable if not installed
         //worldGuardFound = worldGuardIsInstalled();
         //if (!worldGuardFound) { return; }
@@ -106,7 +108,6 @@ public class OuroborosMines extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        ChatUtil.init(this);
         if (!regionProviderFound) {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
